@@ -1,0 +1,91 @@
+[project]
+name = "countvideobench-qwen2-5-vl"
+version = "1.0.0"
+description = "Evaluation of Qwen2.5-VL (7B / 72B) on CountVideoBench"
+readme = "README.md"
+requires-python = "==3.12.*"
+dependencies = [
+    "torch==2.9.1",
+    "torchvision==0.24.1",        # also used by qwen-vl-utils to resize the frames
+    "transformers==5.0.0.dev0",   # git commit, see [tool.uv.sources]
+    "accelerate==1.12.0",
+    "qwen-vl-utils==0.0.8",
+    "decord2==2.0.0",             # video reader used by qwen-vl-utils for the paper
+    "huggingface-hub==1.2.3",
+    "numpy==2.3.5",
+    "tqdm==4.67.1",
+]
+
+[tool.uv]
+# Scripts only: nothing to build or install from this folder.
+package = false
+# Linux only, on x86_64 or aarch64 (e.g. GH200). The lock fails if a
+# dependency has no wheel for one of these platforms.
+environments = [
+    "sys_platform == 'linux' and platform_machine == 'x86_64'",
+    "sys_platform == 'linux' and platform_machine == 'aarch64'",
+]
+required-environments = [
+    "sys_platform == 'linux' and platform_machine == 'x86_64'",
+    "sys_platform == 'linux' and platform_machine == 'aarch64'",
+]
+# Transitive dependencies pinned to the versions of the environment used for
+# the paper (pip freeze). They only apply when a package is actually required.
+constraint-dependencies = [
+    "anyio==4.12.0",
+    "av==16.0.1",
+    "certifi==2025.11.12",
+    "charset-normalizer==3.4.4",
+    "click==8.3.1",
+    "filelock==3.20.1",
+    "fsspec==2025.12.0",
+    "h11==0.16.0",
+    "hf-xet==1.2.0",
+    "httpcore==1.0.9",
+    "httpx==0.28.1",
+    "idna==3.11",
+    "jinja2==3.1.6",
+    "markupsafe==3.0.3",
+    "mpmath==1.3.0",
+    "networkx==3.6.1",
+    "nvidia-cublas==13.0.0.19",
+    "nvidia-cuda-cupti==13.0.48",
+    "nvidia-cuda-nvrtc==13.0.48",
+    "nvidia-cuda-runtime==13.0.48",
+    "nvidia-cudnn-cu13==9.13.0.50",
+    "nvidia-cufft==12.0.0.15",
+    "nvidia-cufile==1.15.0.42",
+    "nvidia-curand==10.4.0.35",
+    "nvidia-cusolver==12.0.3.29",
+    "nvidia-cusparse==12.6.2.49",
+    "nvidia-cusparselt-cu13==0.8.0",
+    "nvidia-nccl-cu13==2.27.7",
+    "nvidia-nvjitlink==13.0.39",
+    "nvidia-nvshmem-cu13==3.3.24",
+    "nvidia-nvtx==13.0.39",
+    "packaging==25.0",
+    "pillow==12.0.0",
+    "psutil==7.1.3",
+    "pyyaml==6.0.3",
+    "regex==2025.11.3",
+    "requests==2.32.5",
+    "safetensors==0.7.0",
+    "setuptools==80.9.0",
+    "shellingham==1.5.4",
+    "sympy==1.14.0",
+    "tokenizers==0.22.1",
+    "triton==3.5.1",
+    "typer-slim==0.20.0",
+    "typing-extensions==4.15.0",
+    "urllib3==2.6.2",
+]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu130" }
+torchvision = { index = "pytorch-cu130" }
+transformers = { git = "https://github.com/huggingface/transformers", rev = "4c64a8fb15de548ea3a684f6a621a9c3118318ef" }
+
+[[tool.uv.index]]
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true
